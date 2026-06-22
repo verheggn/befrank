@@ -1,0 +1,196 @@
+openapi: 3.1.0
+
+info:
+  title: Pensioen API
+  version: 1.0.0
+
+paths:
+
+  /deelnemers/{deelnemerId}/pensioenprognose:
+    get:
+      operationId: berekenPensioenprognose
+      parameters:
+        - name: deelnemerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+        - name: gewenstePensioenLeeftijd
+          in: query
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: Pensioenprognose
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PensioenPrognose'
+
+components:
+
+  schemas:
+
+    Deelnemer:
+      type: object
+      required:
+        - id
+        - voornaam
+        - achternaam
+        - emailadres
+        - geboortedatum
+        - dienstverband
+        - pensioenrekening
+
+      x-class-extra-annotation: >-
+        @jakarta.persistence.Entity
+        @jakarta.persistence.Table(name = "deelnemer")
+
+      properties:
+
+        id:
+          type: integer
+          format: int64
+          x-field-extra-annotation: >-
+            @jakarta.persistence.Id
+            @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+
+        voornaam:
+          type: string
+          x-field-extra-annotation: >-
+            @jakarta.persistence.Column(nullable = false)
+
+        achternaam:
+          type: string
+          x-field-extra-annotation: >-
+            @jakarta.persistence.Column(nullable = false)
+
+        emailadres:
+          type: string
+          format: email
+          x-field-extra-annotation: >-
+            @jakarta.persistence.Column(nullable = false)
+
+        geboortedatum:
+          type: string
+          format: date
+          x-field-extra-annotation: >-
+            @jakarta.persistence.Column(nullable = false)
+
+        dienstverband:
+          $ref: '#/components/schemas/Dienstverband'
+          x-field-extra-annotation: >-
+            @jakarta.persistence.OneToOne(cascade = jakarta.persistence.CascadeType.ALL)
+            @jakarta.persistence.JoinColumn(name = "dienstverband_id")
+
+        pensioenrekening:
+          $ref: '#/components/schemas/PensioenRekening'
+          x-field-extra-annotation: >-
+            @jakarta.persistence.OneToOne(cascade = jakarta.persistence.CascadeType.ALL)
+            @jakarta.persistence.JoinColumn(name = "pensioenrekening_id")
+
+    Dienstverband:
+      type: object
+      required:
+        - werkgever
+        - fulltimeSalaris
+        - parttimePercentage
+        - isIndienst
+
+      x-class-extra-annotation: >-
+        @jakarta.persistence.Entity
+        @jakarta.persistence.Table(name = "dienstverband")
+
+      properties:
+
+        id:
+          type: integer
+          format: int64
+          x-field-extra-annotation: >-
+            @jakarta.persistence.Id
+            @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+
+        werkgever:
+          type: string
+
+        fulltimeSalaris:
+          type: number
+          format: double
+
+        parttimePercentage:
+          type: number
+          format: double
+
+        franchise:
+          type: number
+          format: double
+
+        premiePercentage:
+          type: number
+          format: double
+
+        isIndienst:
+          type: boolean
+
+    PensioenRekening:
+      type: object
+      required:
+        - id
+        - rekeningnummer
+
+      x-class-extra-annotation: >-
+        @jakarta.persistence.Entity
+        @jakarta.persistence.Table(name = "pensioenrekening")
+
+      properties:
+
+        id:
+          type: integer
+          format: int64
+          x-field-extra-annotation: >-
+            @jakarta.persistence.Id
+            @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+
+        rekeningnummer:
+          type: string
+          x-field-extra-annotation: >-
+            @jakarta.persistence.Column(nullable = false, unique = true)
+
+    Fonds:
+      type: object
+
+      properties:
+
+        naam:
+          type: string
+
+        waarde:
+          type: number
+          format: double
+
+    PensioenPrognose:
+      type: object
+
+      properties:
+
+        huidigeLeeftijd:
+          type: integer
+
+        gewenstePensioenLeeftijd:
+          type: integer
+
+        huidigeWaarde:
+          type: number
+          format: double
+
+        jaarlijksePremie:
+          type: number
+          format: double
+
+        verwachteWaarde:
+          type: number
+          format: double
