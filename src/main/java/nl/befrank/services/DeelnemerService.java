@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class DeelnemerService {
 
     // naive implementatie van leeftijd, we nemen aan dat de deelnemer dit jaar al jarig is geweest
-    public Integer getLeeftijd(Deelnemer deelnemer){
+    public static Integer getLeeftijd(Deelnemer deelnemer){
         int geboorteJaar = deelnemer.getGeboortedatum().getYear();
         return LocalDate.now().getYear() - geboorteJaar;
     }
