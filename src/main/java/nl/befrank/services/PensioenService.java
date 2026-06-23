@@ -1,6 +1,7 @@
 package nl.befrank.services;
 
 import lombok.RequiredArgsConstructor;
+import nl.befrank.mappers.DeelnemerMapper;
 import nl.befrank.model.Deelnemer;
 import nl.befrank.model.Dienstverband;
 import nl.befrank.model.PensioenPrognose;
@@ -16,13 +17,29 @@ public class PensioenService {
     private final DeelnemerRepository deelnemerRepository;
     private final DeelnemerService deelnemerService;
     private final PensioenRekeningService rekeningService;
+    private final DeelnemerMapper deelnemerMapper;
 
+
+    /**
+     * bereken een pensionprognose van een deelnemer op basis van deelnemerID en de gewenste pensioenleeftijd
+     *
+     * @param deelnemerId
+     * @param gewenstePensioenLeeftijd
+     * @return de pensioenPrognose
+     */
     public PensioenPrognose berekenPrognose(Long deelnemerId, Integer gewenstePensioenLeeftijd) {
 
-        Deelnemer deelnemer = deelnemerRepository.getReferenceById(deelnemerId);
+        Deelnemer deelnemer = deelnemerRepository.findById(deelnemerId).orElseThrow();
         return berekenPrognose(deelnemer, gewenstePensioenLeeftijd);
     }
 
+    /**
+     * bereken een pensionprognose van een deelnemer op basis van de gewenste pensioenleeftijd
+     *
+     * @param deelnemer
+     * @param gewenstePensioenLeeftijd
+     * @return de pensioenPrognose
+     */
     public PensioenPrognose berekenPrognose(Deelnemer deelnemer, Integer gewenstePensioenLeeftijd) {
 
         Double huidigeWaarde = rekeningService.getHuidigeWaarde(deelnemer.getPensioenrekening());
@@ -38,6 +55,7 @@ public class PensioenService {
         }
 
         return new PensioenPrognose()
+                .deelnemer(deelnemerMapper.toDto(deelnemer))
                 .huidigeLeeftijd(leeftijd)
                 .gewenstePensioenLeeftijd(gewenstePensioenLeeftijd)
                 .huidigeWaarde(huidigeWaarde)
