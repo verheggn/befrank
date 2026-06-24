@@ -11,7 +11,7 @@ INSERT INTO dienstverband (
 VALUES
 (1, 'BeFrank', 60000, 80, 15599, 5, TRUE),
 (2, 'Acme Nederland', 52000, 100, 17545, 5.5, TRUE),
-(3, 'Tech Solutions', 78000, 90, 17545, 4.5, TRUE);
+(3, 'Tech Solutions', 78000, 90, 17545, 4.5, FALSE);
 
 -- Pensioenrekeningen
 INSERT INTO pensioenrekening (

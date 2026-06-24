@@ -18,9 +18,9 @@ public class DeelnemerController implements DeelnemersApi {
             Long deelnemerId,
             Integer gewenstePensioenLeeftijd) {
 
-        PensioenPrognose prognose =
-                pensioenService.berekenPrognose(deelnemerId, gewenstePensioenLeeftijd);
-
+        PensioenPrognose prognose = pensioenService.berekenPrognose(deelnemerId, gewenstePensioenLeeftijd);
         return ResponseEntity.ok(prognose);
+
     }
+
 }

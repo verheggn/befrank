@@ -12,6 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PensioenRekeningService {
 
+    private final ExterneRekeningService externeRekeningService;
     /**
      * Bereken de huidige waarde van de pensioenrekening op basis van de som van de waardes van alle fondsen
      *
@@ -19,13 +20,7 @@ public class PensioenRekeningService {
      * @return de huidige waarde van de pensioenrekening
      */
     public Double getHuidigeWaarde(PensioenRekening rekening) {
-        List<Fonds> fondsen = getFondsen(rekening.getRekeningnummer());
+        List<Fonds> fondsen = externeRekeningService.getFondsen(rekening.getRekeningnummer());
         return fondsen.stream().map(Fonds::getWaarde).reduce(0d, Double::sum);
-    }
-
-    public static List<Fonds> getFondsen(String rekeningnummer) {
-
-        // ToDo: implementatie van aanroep externe API
-        return List.of(new Fonds().waarde(40000d), new Fonds().waarde(60000d));
     }
 }

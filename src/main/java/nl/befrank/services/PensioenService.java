@@ -21,7 +21,7 @@ public class PensioenService {
 
 
     /**
-     * bereken een pensionprognose van een deelnemer op basis van deelnemerID en de gewenste pensioenleeftijd
+     * bereken een pensioenprognose van een deelnemer op basis van deelnemerID en de gewenste pensioenleeftijd
      *
      * @param deelnemerId
      * @param gewenstePensioenLeeftijd
